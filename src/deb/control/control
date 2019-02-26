@@ -1,0 +1,8 @@
+Package: oc-search-lucene
+Version: [[version]]
+Section: server
+Priority: optional
+Architecture: all
+Pre-Depends: default-jre-headless (>= 2:1.8) | java8-runtime-headless
+Description: OwnCloud search provider based on Apache Lucene
+Maintainer: oliver.archner@uni-bayreuth.de

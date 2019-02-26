@@ -1,0 +1,9 @@
+#!/bin/bash
+set -e
+chmod +x /var/lib/oc-search-lucene/oc-search-lucene.jar
+ln -sf /var/lib/oc-search-lucene/oc-search-lucene.jar /etc/init.d/oc-search-lucene
+ln -sf /etc/oc-search-lucene/application.properties /var/lib/oc-search-lucene/application.properties
+update-rc.d oc-search-lucene defaults
+service oc-search-lucene start  
+
+

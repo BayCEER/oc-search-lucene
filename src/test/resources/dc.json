@@ -1,0 +1,15 @@
+[
+{"id": 1,"path":"SFB/Microplastics/Bayreuth/README.dc", "content":"title:Secondary microplastics\ncreator:Homer Simpson\npublisher:University of Bayreuth\n"},
+{"id": 2,"path":"SFB/Microplastics/München/README.dc",  "content":"title:Primary microplastics\ncreator:Marge Simpson\npublisher:University of Munich\n"},
+{"id": 3,"path":"SFB/Microplastics/Regensburg/README.dc", "content":"title:Primary microplastics\ncreator:Bart Simpson\npublisher:University of Regensburg\n"},
+{"id": 4,"path":"SFB/Microplastics/Landshut/README.dc","content":"title:Primary microplastics\ncreator:Bart Simpson\npublisher:University of Landshut\n"},
+{"id": 5,"path":"SFB/Microplastics/Freising/README.dc", "content":"title:Primary microplastics\ncreator:Lisa Simpson\npublisher:University of Freising\n"},
+{"id": 6,"path":"SFB/Microplastics/Würzburg/README.dc", "content":"title:Primary microplastics\ncreator:Maggie Simpson\npublisher:University of Würzburg\n"},
+{"id": 7,"path":"SFB/Microplastics/Paris/README.dc", "content":"title:Secondary microplastics\ncreator:Bart Simpson\npublisher:University of Paris\n"},
+{"id": 8,"path":"SFB/Microplastics/Berlin/README.dc","content":"title:Secondary microplastics\ncreator:Maggie Simpson\npublisher:University of Berlin\n"},
+{"id": 9,"path":"SFB/Microplastics/New York/README.dc","content":"title:Secondary microplastics\ncreator:Bart Simpson\npublisher:University of New York\n"},
+{"id": 10,"path":"SFB/Microplastics/Calgary/README.dc","content":"title:Secondary microplastics\ncreator:Lisa Simpson\npublisher:University of Calgary\n"},
+{"id": 11,"path":"SFB/Microplastics/Hamburg/README.dc", "content":"title:Secondary microplastics\ncreator:Marge Simpson\npublisher:University of Hamburg\n"},
+{"id": 12,"path":"SFB/Microplastics/Bamberg/README.dc", "content":"title:Secondary microplastics\ncreator:Homer Simpson\npublisher:University of Bamberg\n"},
+{"id": 13,"path":"REZ/Howtos/BayEOS/README.dc", "content":"title:Getting started with BayEOS\ncreator:Tom Tailor\npublisher:University of Nebraska\n"}
+]

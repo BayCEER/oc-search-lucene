@@ -1,0 +1,8 @@
+#!/bin/bash
+set -e
+
+if [ -e /etc/init.d/oc-search-lucene ]
+then
+	service oc-search-lucene stop
+	rm -f /etc/init.d/oc-search-lucene
+fi 
