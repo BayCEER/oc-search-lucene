@@ -44,7 +44,28 @@ public class IndexController {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	private static final int maxHits = 100;
-
+	
+	@RequestMapping(value = "/index", method = RequestMethod.POST)
+	public void create(@RequestBody DcFile file) throws IOException {
+		logger.debug("create index for file:" + file.getPath());
+		indexWriter.addDocument(getDocument(file));
+		indexWriter.commit();
+	}
+	
+	@RequestMapping(value = "/index/{id}", method = RequestMethod.PUT)
+	public void update(@PathVariable Long id, @RequestBody DcFile file) throws IOException {
+		logger.debug("update index for file:" + file.getPath());
+		indexWriter.updateDocument(new Term("id", Long.toString(id)), getDocument(file));
+		indexWriter.commit();
+	}
+	
+	@RequestMapping(path = "/index/{id}", method = RequestMethod.DELETE)
+	public void delete(@PathVariable Long id) throws IOException {
+		logger.debug("delete index for file:" + id);
+		indexWriter.deleteDocuments(new Term("id", Long.toString(id)));
+		indexWriter.commit();
+	}
+	
 			
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	public Response search(@RequestParam("query") String queryString,
@@ -65,14 +86,8 @@ public class IndexController {
 		return new Response(hits,collector.getTotalHits());
 	}
 		
-	@RequestMapping(value = "/index", method = RequestMethod.POST)
-	public void create(@RequestBody DcFile file) throws IOException {
-		logger.debug("create index for file:" + file.getPath());
-		indexWriter.addDocument(getDocument(file));
-		indexWriter.commit();
-	}
 	
-	
+		
 	@RequestMapping(value = "/indexes", method = RequestMethod.POST)
 	public void createMany(@RequestBody List<DcFile> files) throws IOException {
 		for(DcFile file:files) {
@@ -82,25 +97,7 @@ public class IndexController {
 		indexWriter.commit();
 	}
 
-	@RequestMapping(value = "/index/{id}", method = RequestMethod.PUT)
-	public void update(@PathVariable Long id, @RequestBody DcFile file) throws IOException {
-		logger.debug("update index for file:" + file.getPath());
-		indexWriter.updateDocument(new Term("id", Long.toString(id)), getDocument(file));
-		indexWriter.commit();
-	}
-	
-	
-	
-	
-
-	@RequestMapping(path = "/index/{id}", method = RequestMethod.DELETE)
-	public void delete(@PathVariable Long id) throws IOException {
-		logger.debug("delete index for file:" + id);
-		indexWriter.deleteDocuments(new Term("id", Long.toString(id)));
-		indexWriter.commit();
-	}
-	
-	
+		
 	@RequestMapping(path = "/indexes", method = RequestMethod.DELETE)
 	public void deleteAll() throws IOException {
 		logger.debug("delete alle indexes");
