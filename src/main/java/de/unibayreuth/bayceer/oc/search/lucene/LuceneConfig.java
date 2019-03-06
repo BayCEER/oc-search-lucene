@@ -3,7 +3,11 @@ package de.unibayreuth.bayceer.oc.search.lucene;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.miscellaneous.PerFieldAnalyzerWrapper;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
@@ -21,9 +25,13 @@ public class LuceneConfig {
 	private String indexPath;
 
 		
-	@Bean StandardAnalyzer analyzer() {
-		return new StandardAnalyzer(); 
+	@Bean Analyzer analyzer() {		
+		Map<String, Analyzer> analyzerPerField = new HashMap<String, Analyzer>();		
+		analyzerPerField.put("content", new ReadMeDcAnalyzer());		
+		return new PerFieldAnalyzerWrapper(new StandardAnalyzer(), analyzerPerField);				 
 	}
+	
+	
 	
 	@Bean
 	public IndexWriterConfig indexWriterConfig() {		

@@ -29,7 +29,6 @@ import io.restassured.specification.RequestSpecification;
 @SpringBootTest(webEnvironment=WebEnvironment.DEFINED_PORT)
 public class OcSearchLuceneApplicationTests {
 	
-	
 	private RequestSpecification req;
 		
 	@Before	
@@ -77,12 +76,12 @@ public class OcSearchLuceneApplicationTests {
 	}
 			
 	@Test
-	public void updateContent() throws IOException {		
+	public void updateContentWithPut() throws IOException {		
 		given(req).body(new String(Files.readAllBytes(Paths.get("src/test/resources/dc_update.json")))).put("/index/2").then().statusCode(200);		
 		given(req).param("query","id:2").get("/index").then().assertThat().body("hits[0].path",equalTo("SFB/Microplastics/Munich/README.dc"));	
 	}
-	
-	
+		
+		
 	@Test
 	public void deleteContent() {
 		given(req).delete("/index/2").then().statusCode(200);

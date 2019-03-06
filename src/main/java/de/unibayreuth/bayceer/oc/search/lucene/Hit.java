@@ -5,11 +5,14 @@ public class Hit {
 	public Long id;
 	public Float score;
 	public String path;
+	public String[] previews;
 	
-	public Hit(long id, float score, String path) {
+	
+	public Hit(long id, float score, String path, String[] previews) {
 		this.id = id;
 		this.score = score;
 		this.path = path;
+		this.previews = previews;
 	}
 	public Long getId() {
 		return id;
@@ -29,6 +32,13 @@ public class Hit {
 	public void setPath(String path) {
 		this.path = path;
 	}
+	public String[] getPreviews() {
+		return previews;
+	}
+	public void setPreviews(String[] previews) {
+		this.previews = previews;
+	}
+	
 
 	
 }
