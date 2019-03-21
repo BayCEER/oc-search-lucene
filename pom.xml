@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>de.unibayreuth.bayceer.oc</groupId>
 	<artifactId>oc-search-lucene</artifactId>
-	<version>1.0.0</version>
+	<version>1.2.0</version>
 	<name>oc-search-lucene</name>
 	<description>OwnCloud search provider based on Apache Lucene</description>
 
@@ -75,19 +75,19 @@
 			<artifactId>lucene-queryparser</artifactId>
 			<version>${lucene.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.lucene</groupId>
 			<artifactId>lucene-analyzers-common</artifactId>
 			<version>${lucene.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.lucene</groupId>
 			<artifactId>lucene-highlighter</artifactId>
 			<version>${lucene.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>io.rest-assured</groupId>
 			<artifactId>rest-assured</artifactId>
@@ -98,6 +98,36 @@
 
 	<build>
 		<plugins>
+
+			<plugin>
+				<groupId>org.asciidoctor</groupId>
+				<artifactId>asciidoctor-maven-plugin</artifactId>
+				<version>1.5.3</version>
+				<executions>
+					<execution>
+						<id>generate-docs</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>process-asciidoc</goal>
+						</goals>
+						<configuration>
+							<backend>html</backend>
+							<doctype>book</doctype>
+							 <attributes>
+							  <project-version>${project.version}</project-version>
+                			 </attributes>
+						</configuration>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.springframework.restdocs</groupId>
+						<artifactId>spring-restdocs-asciidoctor</artifactId>
+						<version>2.0.3.RELEASE</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
@@ -130,7 +160,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			
+
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
@@ -138,27 +168,27 @@
 					<executable>true</executable>
 				</configuration>
 			</plugin>
-			
+
 			<plugin>
 				<!-- Filtering of user defined variables in resources folders -->
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
+				<artifactId>maven-resources-plugin</artifactId>				
 				<configuration>
 					<useDefaultDelimiters>true</useDefaultDelimiters>
 				</configuration>
 			</plugin>
-			
+
 		</plugins>
-		
+
 		<resources>
-		<resource>
-			<directory>src/deb</directory>
-				<filtering>true</filtering>				
+			<resource>
+				<directory>src/deb</directory>
+				<filtering>true</filtering>
 				<targetPath>${project.build.directory}/deb</targetPath>
-		</resource>
-		
+			</resource>
+
 		</resources>
-		
+
 	</build>
 
 </project>

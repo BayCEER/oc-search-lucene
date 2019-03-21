@@ -21,6 +21,7 @@ import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopScoreDocCollector;
 import org.apache.lucene.search.highlight.Formatter;
 import org.apache.lucene.search.highlight.Fragmenter;
@@ -33,12 +34,15 @@ import org.apache.lucene.search.highlight.TokenSources;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import de.unibayreuth.bayceer.oc.search.lucene.ImageController.ImageType;
 
 @RestController
 public class IndexController {
@@ -48,6 +52,9 @@ public class IndexController {
 
 	@Autowired
 	Analyzer analyzer;
+	
+	@Autowired
+	ImageController imageController;
 	
 	
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -59,8 +66,8 @@ public class IndexController {
 	
 	
 	
-	@RequestMapping(value = "/index", method = RequestMethod.POST)
-	public void create(@RequestBody DcFile file, @RequestParam(value="overWrite",defaultValue="true") boolean overWrite) throws IOException {
+	@RequestMapping(value = "/index", method = RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_UTF8_VALUE, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public void create(@RequestBody DcDocument file, @RequestParam(value="overWrite",defaultValue="true") boolean overWrite) throws IOException {
 		logger.debug("create index for file:" + file.getPath());					
 		if (overWrite) {
 			indexWriter.deleteDocuments(new Term("id", Long.toString(file.getId())));			
@@ -70,12 +77,32 @@ public class IndexController {
 	}
 	
 	
-	@RequestMapping(value = "/index/{id}", method = RequestMethod.PUT)
-	public void update(@PathVariable Long id, @RequestBody DcFile file) throws IOException {
+	@RequestMapping(value = "/index/{id}", method = RequestMethod.PUT, consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public void update(@PathVariable Long id, @RequestBody DcDocument file) throws IOException {
 		logger.debug("update index for file:" + file.getPath());
 		indexWriter.updateDocument(new Term("id", Long.toString(id)), getDocument(file));
 		indexWriter.commit();
 	}
+	
+	@RequestMapping(value = "/index/{id}", method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public DcDocument getDocument(@PathVariable Long id) throws IOException {				
+		IndexSearcher searcher = new IndexSearcher(DirectoryReader.open(indexWriter));		
+		Query q = new TermQuery(new Term("id", Long.toString(id)));
+		ScoreDoc[] hits = searcher.search(q, 1).scoreDocs;					
+		if (hits.length == 0) {
+			return null;
+		} else {
+			Document d = searcher.doc(hits[0].doc);	
+			DcDocument dc = new DcDocument();
+			dc.setId(id);
+			dc.setPath(d.get("path"));
+			dc.setContent(d.get("content"));
+			String lm = d.get("lastModified");			
+			dc.setLastModified((lm!=null)?Long.valueOf(lm):null);
+			return dc;			
+		}							
+	}
+	
 	
 	@RequestMapping(path = "/index/{id}", method = RequestMethod.DELETE)
 	public void delete(@PathVariable Long id) throws IOException {
@@ -85,7 +112,7 @@ public class IndexController {
 	}
 	
 			
-	@RequestMapping(value = "/index", method = RequestMethod.GET)
+	@RequestMapping(value = "/index", method = RequestMethod.GET,produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public Response search(@RequestParam("query") String queryString,
 			@RequestParam(value="start",defaultValue="0") int start,
 			@RequestParam(value="hitsPerPage", defaultValue="10") int hitsPerPage, @RequestParam(value="preViewSize", defaultValue="10") int preViewSize) throws ParseException, IOException {
@@ -117,18 +144,26 @@ public class IndexController {
 			} catch (IOException | InvalidTokenOffsetsException e) {
 				logger.warn(e.getMessage());
 				
+			}		
+			
+			byte[] thumb = null;
+			Long id = Long.valueOf(hd.get("id"));
+			if (imageController.exits(id, ImageType.THUMBNAIL)) {
+				thumb = imageController.getThumb(id);	
 			}			
-			hits.add(new Hit(Long.parseLong(hd.get("id")), s.score, hd.get("path"),previews));
+			hits.add(new Hit(Long.parseLong(hd.get("id")), s.score, hd.get("path"),previews,thumb));
 		}
-		indexReader.close();						
+		indexReader.close();	
+		
+		
 		return new Response(hits,collector.getTotalHits());
 	}
 		
 	
 		
-	@RequestMapping(value = "/indexes", method = RequestMethod.POST)
-	public void createMany(@RequestBody List<DcFile> files) throws IOException {
-		for(DcFile file:files) {
+	@RequestMapping(value = "/indexes", method = RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public void createMany(@RequestBody List<DcDocument> files) throws IOException {
+		for(DcDocument file:files) {
 			logger.debug("create index for file:" + file.getPath());
 			indexWriter.addDocument(getDocument(file));	
 		}		
@@ -143,13 +178,17 @@ public class IndexController {
 		indexWriter.commit();
 	}
 
-	private Document getDocument(DcFile file) throws IOException {		
+	private Document getDocument(DcDocument file) throws IOException {		
 		Document doc = new Document();
 		
 		// Field search in selected parameters 
 		doc.add(new StringField("id", Long.toString(file.getId()), Field.Store.YES));		
 		doc.add(new StringField("path", file.getPath(), Field.Store.YES));
-		doc.add(new LongPoint("lastModified", file.getLastModified()));
+		
+		if (file.getLastModified() != null) {
+			doc.add(new LongPoint("lastModified", file.getLastModified()));	
+		}
+		
 						
 		// Full text and field search in content field
 		doc.add(new TextField("content", file.getContent(), Field.Store.YES));						

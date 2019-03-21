@@ -2,6 +2,8 @@ package de.unibayreuth.bayceer.oc.search.lucene;
 
 import java.io.IOException;
 import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,6 +25,9 @@ public class LuceneConfig {
 	
 	@Value("${INDEX_PATH:}")
 	private String indexPath;
+	
+	@Value("${IMAGE_PATH:}")
+	private String imagePath;
 
 		
 	@Bean Analyzer analyzer() {		
@@ -38,7 +43,17 @@ public class LuceneConfig {
 		return new IndexWriterConfig(analyzer());					
 	}
 	
-	 
+	
+	@Bean	
+	public String thumbPath() throws IOException  {
+		Path p = (!imagePath.isEmpty())?Paths.get(imagePath):FileSystems.getDefault().getPath("oc_images");		
+		if (Files.notExists(p)) {
+			Files.createDirectories(p);			
+		}		
+		return p.toString();		 
+	}
+	
+	
 	
 	@Bean
 	@Order(1)

@@ -4,10 +4,9 @@ import java.util.List;
 
 
 public class Response {
-	public List<Hit> hits;
-	public int totalHits;
-	
-	
+	private List<Hit> hits;
+	private int totalHits;
+		
 	public Response(List<Hit> hits, int totalHits) {
 		super();
 		this.hits = hits;

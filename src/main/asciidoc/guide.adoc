@@ -1,0 +1,148 @@
+= OC-Search Lucene REST Documentation 
+Version {project-version}
+Oliver Archner;
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+:operation-curl-request-title: Example request
+:operation-http-response-title: Example response
+
+[[overview]]
+= Overview
+
+[[overview-http-verbs]]
+== HTTP verbs
+
+OC-Search Lucene tries to adhere as closely as possible to standard HTTP and REST conventions in its use of HTTP verbs.
+
+|===
+| Verb | Usage
+
+| `GET`
+| Used to retrieve a resource
+
+| `POST`
+| Used to create a new resource
+
+| `PUT`
+| Used to update an existing resource
+
+| `DELETE`
+| Used to delete an existing resource
+|===
+
+[[overview-http-status-codes]]
+== HTTP status codes
+
+The following codes are used.
+
+|===
+| Status code | Usage
+
+| `200 OK`
+| The request completed successfully
+
+| `500 Internal Server Error`
+| The request failed
+
+| `404 Not Found`
+| The requested resource did not exist
+|===
+
+[[resources]]
+= Resources
+
+[[resources-index]]
+== Index
+
+The index resource is used to build and query index information.
+ 
+[[resources-index-post]]
+=== Creating an index
+
+A `POST` request is used to create an index
+
+
+
+[[resources-index-get]]
+=== Query an index
+
+A `GET` request is used to query an index
+
+operation::index-get[snippets='request-parameters,response-fields']
+
+[[resources-document-get]]
+=== Get document of an index
+
+A `GET` request is used to retrieve the document of an index
+
+operation::document-get[snippets='path-parameters,response-fields']
+
+[[resources-index-update]]
+=== Updating an index
+
+A `PUT` request is used to update an index.
+
+
+
+[[resources-index-delete]]
+=== Deleting an index
+
+A `DELETE` request is used to delete an index entry.
+
+
+== Indexes
+
+The indexes resource is used to manage many indexes at the same time.
+
+[[resources-indexes-post]]
+=== Create many index entries
+
+A `POST` request is used to create indexes.
+
+
+[[resources-indexes-delete]]
+=== Deleting all index
+
+A `DELETE` request is used to delete all indexes.
+
+== Image
+
+The image resources is used to store and query preview images in full resolution.
+
+== Images
+ 
+The images resource is used to manage many images at the same time.
+
+== Thumbnail
+
+The thumbnail resources is used to store and query low resolution preview images.
+
+[[resources-thumb-post]]
+=== Creating a thumbnail
+
+A `POST` request is used to create a thumbnail.
+
+operation::thumb-post[snippets='path-parameters']
+
+[[resources-thumb-get]]
+=== Retrieve a thumbnail
+
+A `GET` request is used to retrieve a thumbnail. 
+
+operation::thumb-get[snippets='path-parameters']
+
+[[resources-thumb-delete]]
+=== Delete a thumbnail
+
+A `DELETE` request is used to delete a thumbnail. 
+
+operation::thumb-delete[snippets='path-parameters']
+
+
+== Thumbnails
+
+The thumbnails resource is used to manage many thumbnails at the same time.
