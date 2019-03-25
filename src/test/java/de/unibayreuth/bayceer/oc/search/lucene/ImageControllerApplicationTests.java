@@ -1,54 +1,45 @@
 package de.unibayreuth.bayceer.oc.search.lucene;
 
 import static io.restassured.RestAssured.given;
-import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertEquals;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 
 import java.io.File;
 import java.io.IOException;
 
+import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.restdocs.JUnitRestDocumentation;
-import org.springframework.test.context.junit4.SpringRunner;
 
-import io.restassured.builder.RequestSpecBuilder;
-import io.restassured.http.ContentType;
-import io.restassured.specification.RequestSpecification;
 import io.restassured.response.Response;
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertEquals;
 
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment=WebEnvironment.DEFINED_PORT)
-public class ImageControllerApplicationTests {
+
+public class ImageControllerApplicationTests extends ControllerApplicationTests {
 	
-	private RequestSpecification spec;
 	
-	@Rule
-	public JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation();
-		
 	
 	@Before	
-	public void setUp() throws IOException{				
-		// Set default content type for all requests		
-		this.spec = new RequestSpecBuilder()
-		        .setContentType(ContentType.JSON)
-		        .setAccept(ContentType.JSON)
-		        .addFilter(documentationConfiguration(this.restDocumentation))
-		        .build();		
-		given(spec).delete("/images").then().statusCode(200);
-		given(spec).delete("/thumbnails").then().statusCode(200);
-				
+	public void setUp() throws IOException{
+		super.setUp();						
+	}
+	
+	@After
+	public void shutDown() throws IOException {
+		given(spec)
+		.filter(document("images-delete"))
+		.delete("/images").then().statusCode(200);
+		
+		given(spec)
+		.filter(document("thumbs-delete"))
+		.delete("/thumbnails").then().statusCode(200);
 	}
 	
 	@Test 
-	public void testController() {
+	public void thumbPost() {
 		// POST
 		given(spec)
 			.contentType("image/png")
@@ -56,10 +47,11 @@ public class ImageControllerApplicationTests {
 						pathParameters(
 							parameterWithName("id").description("File identifier")				
 						)
+						
 					)
 			)
 			.body(new File("src/test/resources/thumb.png"))
-				.post("/thumbnail/{id}",6)
+			.post("/thumbnail/{id}",6)
 			.then()
 			.statusCode(200);
 		
@@ -96,6 +88,59 @@ public class ImageControllerApplicationTests {
 			.statusCode(404);
 		
 	}
+	
+	
+	@Test 
+	public void imagePost() {
+		// POST
+		given(spec)
+			.contentType("image/png")
+			.filter(document("image-post",
+						pathParameters(
+							parameterWithName("id").description("File identifier")				
+						)
+						
+					)
+			)
+			.body(new File("src/test/resources/image.png"))
+			.post("/image/{id}",10)
+			.then()
+			.statusCode(200);
+		
+		// GET
+		Response r = given(spec)
+			.accept("image/png")
+			.filter(document("image-get",pathParameters(
+				parameterWithName("id").description("File identifier")
+			)))
+		.when()
+			.get("/image/{id}",10)
+		.then()
+			.assertThat().header("Content-Length",Integer::parseInt, equalTo(13372342))
+			.statusCode(200)			
+		.extract().response();		
+		assertEquals(13372342, r.body().asByteArray().length);
+		
+		// DELETE
+		given(spec)
+			.filter(document("image-delete",pathParameters(
+				parameterWithName("id").description("File identifier")
+			)))
+		.when()
+			.delete("image/{id}", 10)
+		.then()
+			.statusCode(200);
+		
+		// NOT FOUND 
+		given(spec)
+			.accept("image/png")
+		.when()
+			.get("/image/{id}",10)
+		.then()
+			.statusCode(404);
+		
+	}
+	
 	
 	
 	

@@ -4,78 +4,99 @@ package de.unibayreuth.bayceer.oc.search.lucene;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.fail;
-
-import static io.restassured.RestAssured.given;
-import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.subsectionWithPath;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
+import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
+import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.documentationConfiguration;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.restdocs.JUnitRestDocumentation;
+import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.test.context.junit4.SpringRunner;
 
-import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
-import io.restassured.specification.RequestSpecification;
 
-@SuppressWarnings("unused")
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment=WebEnvironment.DEFINED_PORT)
-public class IndexControllerApplicationTests {
+public class IndexControllerApplicationTests extends ControllerApplicationTests {
 	
-	private RequestSpecification spec;
 	
-	@Rule
-	public JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation();
-		
+	FieldDescriptor[] dcDocumentFields = new FieldDescriptor[] {
+			fieldWithPath("id").description("File identifier").type(JsonFieldType.NUMBER),
+			fieldWithPath("path").description("ownCloud file path").type(JsonFieldType.STRING),
+			fieldWithPath("content").description("File content as string").type(JsonFieldType.STRING),
+			fieldWithPath("lastModified").description("Last modification time").type(JsonFieldType.NUMBER).optional()			
+	};
 	
-	private String jsonIn;
+	
 		
 	@Before	
-	public void setUp() throws IOException{				
-		// Set default content type for all requests		
-		this.spec = new RequestSpecBuilder()
-		        .setContentType(ContentType.JSON)
-		        .setAccept(ContentType.JSON)
-		        .addFilter(documentationConfiguration(this.restDocumentation))
-		        .build();				
-
-		// Init index 		
-		jsonIn = new String(Files.readAllBytes(Paths.get("src/test/resources/dc.json")));
+	public void setUp() throws IOException{
+		super.setUp();
 		
-		given(spec).delete("/indexes").then().statusCode(200);		
+		given(spec).delete("/indexes").then().statusCode(200);
+		
+		
 		// Import sample data 		
-		given(spec).body(jsonIn).post("/indexes").then().statusCode(200);		
+		given(spec)
+		.filter(
+				document("indexes-post",
+						requestFields(
+								fieldWithPath("[]").description("An array of DC documents")).andWithPrefix("[].", dcDocumentFields)													
+						)
+		)
+		.body(new String(Files.readAllBytes(Paths.get("src/test/resources/dc.json"))))
+		.post("/indexes")
+		.then()
+		.statusCode(200);				
+	}
+	
 		
+	
+	@Test
+	public void indexPost() throws IOException {
+		given(spec)
+		.filter(
+			document("index-post",
+					requestParameters( 
+							parameterWithName("overWrite").description("Overwrite entry: {true|false}").optional() 							
+					), 
+					requestFields(dcDocumentFields)																			
+			)
+		)
+		.body(new String(Files.readAllBytes(Paths.get("src/test/resources/dc_post.json"))))
+		.post("/index")
+		.then()
+		.statusCode(200);				
 	}
 		
 	@Test
-	public void queryContent() {
+	public void indexGet() {
 		given(spec)
 		.filter(
 			document("index-get", 
 				requestParameters( 
-						parameterWithName("query").description("Lucene query string"), 
+						parameterWithName("query").description("http://lucene.apache.org/core/7_7_0/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#package.description[Lucene query parser syntax]"), 
 						parameterWithName("start").description("Start index"),
 						parameterWithName("hitsPerPage").description("Number of hit records per page")
 				), 
 				responseFields( 
 						subsectionWithPath("hits").description("An array of hits."),
-						fieldWithPath("totalHits").description("The number of all hits found.")
-						
+						fieldWithPath("hits[].id").description("File identifier").type(JsonFieldType.NUMBER),
+						fieldWithPath("hits[].score").description("Match score").type(JsonFieldType.NUMBER),
+						fieldWithPath("hits[].path").description("File path").type(JsonFieldType.STRING),
+						fieldWithPath("hits[].previews").description("Hit higlighted text fragment.").type(JsonFieldType.ARRAY),						
+						fieldWithPath("hits[].thumb").description("Thumbnail").type(JsonFieldType.STRING).optional(),						
+						fieldWithPath("totalHits").description("The number of all hits found.")												
 				)
 			)
 		)
@@ -87,20 +108,14 @@ public class IndexControllerApplicationTests {
 	}
 	
 	@Test
-	public void queryDocument() {
+	public void documentGet() {
 		given(spec)
 		.filter(
 				document("document-get",
 						pathParameters(
 								parameterWithName("id").description("File identifier")				
 						),
-						responseFields( 
-								fieldWithPath("id").description("File identifier").type(JsonFieldType.NUMBER),
-								fieldWithPath("path").description("ownCloud file path").type(JsonFieldType.STRING),
-								fieldWithPath("content").description("File content as string").type(JsonFieldType.STRING),
-								fieldWithPath("lastModified").description("Last modification time").type(JsonFieldType.NUMBER).optional()								
-						)
-						
+						responseFields(dcDocumentFields)						
 				)
 		)
 		.get("index/{id}",10).then().assertThat()
@@ -109,7 +124,7 @@ public class IndexControllerApplicationTests {
 		
 	
 	@Test 
-	public void queryParameter() {
+	public void indexParameterQuery() {
 		given(spec).param("query", "creator:Maggie")
 		.get("/index").then()
 		.assertThat().body("hits.size()", is(2))
@@ -117,7 +132,7 @@ public class IndexControllerApplicationTests {
 	}
 	
 	@Test 
-	public void queryParameterWithPaging() {
+	public void indexPaging() {
 		given(spec).param("query", "microplastics").param("start", 0).param("hitsPerPage",5)
 		.get("/index").then()
 		.assertThat().body("hits.size()", is(5)).and().body("totalHits", equalTo(12));
@@ -132,15 +147,36 @@ public class IndexControllerApplicationTests {
 	}
 			
 	@Test
-	public void updateContentWithPut() throws IOException {		
-		given(spec).body(new String(Files.readAllBytes(Paths.get("src/test/resources/dc_update.json")))).put("/index/2").then().statusCode(200);		
+	public void indexPut() throws IOException {		
+		given(spec)
+		.filter(
+		document("index-put",
+				pathParameters(
+						parameterWithName("id").description("File identifier")				
+				),
+				requestFields(dcDocumentFields)																			
+				)
+		)
+		.body(new String(Files.readAllBytes(Paths.get("src/test/resources/dc_update.json"))))
+		.put("/index/{id}",2)
+		.then()
+		.statusCode(200);		
+		
 		given(spec).param("query","id:2").get("/index").then().assertThat().body("hits[0].path",equalTo("SFB/Microplastics/Munich/README.dc"));	
 	}
 		
 		
 	@Test
-	public void deleteContent() {
-		given(spec).delete("/index/2").then().statusCode(200);
+	public void indexDelete() {
+		given(spec)
+		.filter(document("index-delete",
+				pathParameters(
+						parameterWithName("id").description("File identifier")				
+						)
+				
+				)
+		)
+		.delete("/index/{id}",2).then().statusCode(200);
 		given(spec).param("query","id:2").get("/index").then().assertThat().body("totalHits",equalTo(0));
 		
 	}
