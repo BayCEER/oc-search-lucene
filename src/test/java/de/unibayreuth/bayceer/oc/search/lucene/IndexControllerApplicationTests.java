@@ -51,7 +51,7 @@ public class IndexControllerApplicationTests extends ControllerApplicationTests 
 		.filter(
 				document("indexes-post",
 						requestFields(
-								fieldWithPath("[]").description("An array of DC documents")).andWithPrefix("[].", dcDocumentFields)													
+								fieldWithPath("[]").description("An array of documents")).andWithPrefix("[].", dcDocumentFields)													
 						)
 		)
 		.body(new String(Files.readAllBytes(Paths.get("src/test/resources/dc.json"))))
@@ -90,13 +90,13 @@ public class IndexControllerApplicationTests extends ControllerApplicationTests 
 						parameterWithName("hitsPerPage").description("Number of hit records per page")
 				), 
 				responseFields( 
-						subsectionWithPath("hits").description("An array of hits."),
+						subsectionWithPath("hits").description("An array of hits"),
 						fieldWithPath("hits[].id").description("File identifier").type(JsonFieldType.NUMBER),
 						fieldWithPath("hits[].score").description("Match score").type(JsonFieldType.NUMBER),
 						fieldWithPath("hits[].path").description("File path").type(JsonFieldType.STRING),
-						fieldWithPath("hits[].previews").description("Hit higlighted text fragment.").type(JsonFieldType.ARRAY),						
+						fieldWithPath("hits[].previews").description("Hit highlighted text fragment").type(JsonFieldType.ARRAY),						
 						fieldWithPath("hits[].thumb").description("Thumbnail").type(JsonFieldType.STRING).optional(),						
-						fieldWithPath("totalHits").description("The number of all hits found.")												
+						fieldWithPath("totalHits").description("The number of all hits found")												
 				)
 			)
 		)

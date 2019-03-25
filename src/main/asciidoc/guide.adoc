@@ -118,7 +118,7 @@ A `DELETE` request is used to delete all indexes.
 
 == Image
 
-The image resources is used to store and query preview images in full resolution. All image data is transfered in PNG (image/png) format. 
+The image resources is used to store and query preview images in full resolution. All image data is transferred in PNG (image/png) format. 
 
 [[resources-image-post]]
 === Creating an image 
@@ -153,7 +153,7 @@ operation::images-delete[snippets='curl-request,http-response']
 == Thumbnail
 
 The thumbnail resources is used to store and query low resolution preview images.
-All image data is transfered in PNG (image/png) format.
+All image data is transferred in PNG (image/png) format.
 
 [[resources-thumb-post]]
 === Creating a thumbnail
