@@ -621,7 +621,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/index' -i -X POST \
     -H 'Content-Type: application/json; charset=UTF-8' \
-    -H 'Accept: application/json, application/javascript, text/javascript, text/json' \
+    -H 'Accept: application/json' \
     -d '{"id":99,"path":"SFB/Microplastics/Munich/README.dc","content":"title:Ternary microplastics\ncreator:Marge Simpson\npublisher:University of Munich\n"}
 '</code></pre>
 </div>
@@ -731,7 +731,7 @@ Date: Mon, 25 Mar 2019 16:06:30 GMT</code></pre>
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/index?query=Maggie&amp;start=0&amp;hitsPerPage=10' -i -X GET \
     -H 'Content-Type: application/json; charset=UTF-8' \
-    -H 'Accept: application/json, application/javascript, text/javascript, text/json'</code></pre>
+    -H 'Accept: application/json'</code></pre>
 </div>
 </div>
 </div>
@@ -822,7 +822,7 @@ Transfer-Encoding: chunked
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/index/10' -i -X GET \
     -H 'Content-Type: application/json; charset=UTF-8' \
-    -H 'Accept: application/json, application/javascript, text/javascript, text/json'</code></pre>
+    -H 'Accept: application/json'</code></pre>
 </div>
 </div>
 </div>
@@ -1089,7 +1089,7 @@ Transfer-Encoding: chunked
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/image/10' -i -X DELETE \
     -H 'Content-Type: application/json; charset=UTF-8' \
-    -H 'Accept: application/json, application/javascript, text/javascript, text/json'</code></pre>
+    -H 'Accept: application/json'</code></pre>
 </div>
 </div>
 </div>
@@ -1114,7 +1114,7 @@ Date: Mon, 25 Mar 2019 16:06:29 GMT</code></pre>
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/images' -i -X DELETE \
     -H 'Content-Type: application/json; charset=UTF-8' \
-    -H 'Accept: application/json, application/javascript, text/javascript, text/json'</code></pre>
+    -H 'Accept: application/json'</code></pre>
 </div>
 </div>
 </div>
@@ -1226,7 +1226,7 @@ All image data is transferred in PNG (image/png) format.</p>
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/thumbnail/6' -i -X DELETE \
     -H 'Content-Type: application/json; charset=UTF-8' \
-    -H 'Accept: application/json, application/javascript, text/javascript, text/json'</code></pre>
+    -H 'Accept: application/json'</code></pre>
 </div>
 </div>
 </div>
@@ -1251,7 +1251,7 @@ Date: Mon, 25 Mar 2019 16:06:30 GMT</code></pre>
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/thumbnails' -i -X DELETE \
     -H 'Content-Type: application/json; charset=UTF-8' \
-    -H 'Accept: application/json, application/javascript, text/javascript, text/json'</code></pre>
+    -H 'Accept: application/json'</code></pre>
 </div>
 </div>
 </div>
