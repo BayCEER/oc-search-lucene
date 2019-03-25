@@ -439,105 +439,29 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel1">
 <li><a href="#resources-index">Index</a>
 <ul class="sectlevel2">
-<li><a href="#resources-index-post">Creating an index</a>
-<ul class="sectlevel3">
-<li><a href="#resources-index-post_request_parameters">Request parameters</a></li>
-<li><a href="#resources-index-post_request_fields">Request fields</a></li>
-<li><a href="#resources-index-post_curl_request">Example request</a></li>
-<li><a href="#resources-index-post_http_response">Example response</a></li>
-</ul>
-</li>
-<li><a href="#resources-index-get">Query an index</a>
-<ul class="sectlevel3">
-<li><a href="#resources-index-get_request_parameters">Request parameters</a></li>
-<li><a href="#resources-index-get_response_fields">Response fields</a></li>
-<li><a href="#resources-index-get_curl_request">Example request</a></li>
-<li><a href="#resources-index-get_http_response">Example response</a></li>
-</ul>
-</li>
-<li><a href="#resources-document-get">Get document of an index</a>
-<ul class="sectlevel3">
-<li><a href="#resources-document-get_path_parameters">Path parameters</a></li>
-<li><a href="#resources-document-get_response_fields">Response fields</a></li>
-<li><a href="#resources-document-get_curl_request">Example request</a></li>
-<li><a href="#resources-document-get_http_response">Example response</a></li>
-</ul>
-</li>
-<li><a href="#resources-index-update">Updating an index</a>
-<ul class="sectlevel3">
-<li><a href="#resources-index-update_path_parameters">Path parameters</a></li>
-<li><a href="#resources-index-update_request_fields">Request fields</a></li>
-</ul>
-</li>
-<li><a href="#resources-index-delete">Deleting an index</a>
-<ul class="sectlevel3">
-<li><a href="#resources-index-delete_path_parameters">Path parameters</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#_indexes">Indexes</a>
-<ul class="sectlevel2">
-<li><a href="#resources-indexes-post">Create many index entries</a>
-<ul class="sectlevel3">
-<li><a href="#resources-indexes-post_request_fields">Request fields</a></li>
-</ul>
-</li>
+<li><a href="#resources-index-post">Creating an index</a></li>
+<li><a href="#resources-index-get">Query an index</a></li>
+<li><a href="#resources-document-get">Get the document of an index</a></li>
+<li><a href="#resources-index-update">Updating an index</a></li>
+<li><a href="#resources-index-delete">Deleting an index</a></li>
+<li><a href="#resources-indexes-post">Create many index entries</a></li>
 <li><a href="#resources-indexes-delete">Deleting all index</a></li>
 </ul>
 </li>
 <li><a href="#_image">Image</a>
 <ul class="sectlevel2">
-<li><a href="#resources-image-post">Creating an image</a>
-<ul class="sectlevel3">
-<li><a href="#resources-image-post_path_parameters">Path parameters</a></li>
-</ul>
-</li>
-<li><a href="#resources-image-get">Retrieve an image</a>
-<ul class="sectlevel3">
-<li><a href="#resources-image-get_path_parameters">Path parameters</a></li>
-</ul>
-</li>
-<li><a href="#resources-image-delete">Deleting an image</a>
-<ul class="sectlevel3">
-<li><a href="#resources-image-delete_path_parameters">Path parameters</a></li>
-<li><a href="#resources-image-delete_curl_request">Example request</a></li>
-<li><a href="#resources-image-delete_http_response">Example response</a></li>
-</ul>
-</li>
-<li><a href="#resources-images-delete">Deleting all images</a>
-<ul class="sectlevel3">
-<li><a href="#resources-images-delete_curl_request">Example request</a></li>
-<li><a href="#resources-images-delete_http_response">Example response</a></li>
-</ul>
-</li>
+<li><a href="#resources-image-post">Creating an image</a></li>
+<li><a href="#resources-image-get">Retrieve an image</a></li>
+<li><a href="#resources-image-delete">Deleting an image</a></li>
+<li><a href="#resources-images-delete">Deleting all images</a></li>
 </ul>
 </li>
 <li><a href="#_thumbnail">Thumbnail</a>
 <ul class="sectlevel2">
-<li><a href="#resources-thumb-post">Creating a thumbnail</a>
-<ul class="sectlevel3">
-<li><a href="#resources-thumb-post_path_parameters">Path parameters</a></li>
-</ul>
-</li>
-<li><a href="#resources-thumb-get">Retrieve a thumbnail</a>
-<ul class="sectlevel3">
-<li><a href="#resources-thumb-get_path_parameters">Path parameters</a></li>
-</ul>
-</li>
-<li><a href="#resources-thumb-delete">Delete a thumbnail</a>
-<ul class="sectlevel3">
-<li><a href="#resources-thumb-delete_path_parameters">Path parameters</a></li>
-<li><a href="#resources-thumb-delete_curl_request">Example request</a></li>
-<li><a href="#resources-thumb-delete_http_response">Example response</a></li>
-</ul>
-</li>
-<li><a href="#resources-thumbs-delete">Deleting all thumbnails</a>
-<ul class="sectlevel3">
-<li><a href="#resources-thumbs-delete_curl_request">Example request</a></li>
-<li><a href="#resources-thumbs-delete_http_response">Example response</a></li>
-</ul>
-</li>
+<li><a href="#resources-thumb-post">Creating a thumbnail</a></li>
+<li><a href="#resources-thumb-get">Retrieve a thumbnail</a></li>
+<li><a href="#resources-thumb-delete">Delete a thumbnail</a></li>
+<li><a href="#resources-thumbs-delete">Deleting all thumbnails</a></li>
 </ul>
 </li>
 </ul>
@@ -708,7 +632,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Date: Mon, 25 Mar 2019 15:59:22 GMT</code></pre>
+Date: Mon, 25 Mar 2019 16:06:30 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -816,9 +740,9 @@ Date: Mon, 25 Mar 2019 15:59:22 GMT</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Date: Mon, 25 Mar 2019 16:06:31 GMT
 Content-Length: 413
 Content-Type: application/json;charset=UTF-8
-Date: Mon, 25 Mar 2019 15:59:23 GMT
 Transfer-Encoding: chunked
 
 {"hits":[{"id":8,"score":1.7440647,"path":"SFB/Microplastics/Berlin/README.dc","previews":["title:Secondary microplastics\ncreator:&lt;mark&gt;Maggie&lt;/mark&gt; Simpson\npublisher:University of"],"thumb":null},{"id":6,"score":1.6766974,"path":"SFB/Microplastics/WÃ¼rzburg/README.dc","previews":["title:Primary microplastics\ncreator:&lt;mark&gt;Maggie&lt;/mark&gt; Simpson\npublisher:University of WÃ"],"thumb":null}],"totalHits":2}</code></pre>
@@ -827,7 +751,7 @@ Transfer-Encoding: chunked
 </div>
 </div>
 <div class="sect2">
-<h3 id="resources-document-get"><a class="link" href="#resources-document-get">Get document of an index</a></h3>
+<h3 id="resources-document-get"><a class="link" href="#resources-document-get">Get the document of an index</a></h3>
 <div class="paragraph">
 <p>A <code>GET</code> request is used to retrieve the document of an index</p>
 </div>
@@ -908,8 +832,8 @@ Transfer-Encoding: chunked
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Length: 173
+Date: Mon, 25 Mar 2019 16:06:31 GMT
 Content-Type: application/json;charset=UTF-8
-Date: Mon, 25 Mar 2019 15:59:24 GMT
 Transfer-Encoding: chunked
 
 {"id":10,"path":"SFB/Microplastics/Calgary/README.dc","content":"title:Secondary microplastics\ncreator:Lisa Simpson\npublisher:University of Calgary\n","lastModified":null}</code></pre>
@@ -1011,14 +935,6 @@ Transfer-Encoding: chunked
 </tbody>
 </table>
 </div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_indexes"><a class="link" href="#_indexes">Indexes</a></h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The indexes resource is used to manage many indexes at the same time.</p>
 </div>
 <div class="sect2">
 <h3 id="resources-indexes-post"><a class="link" href="#resources-indexes-post">Create many index entries</a></h3>
@@ -1182,7 +1098,7 @@ Transfer-Encoding: chunked
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Date: Mon, 25 Mar 2019 15:59:21 GMT</code></pre>
+Date: Mon, 25 Mar 2019 16:06:29 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -1207,7 +1123,7 @@ Date: Mon, 25 Mar 2019 15:59:21 GMT</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Date: Mon, 25 Mar 2019 15:59:22 GMT</code></pre>
+Date: Mon, 25 Mar 2019 16:06:30 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -1319,7 +1235,7 @@ All image data is transferred in PNG (image/png) format.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Date: Mon, 25 Mar 2019 15:59:22 GMT</code></pre>
+Date: Mon, 25 Mar 2019 16:06:30 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -1344,7 +1260,7 @@ Date: Mon, 25 Mar 2019 15:59:22 GMT</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Date: Mon, 25 Mar 2019 15:59:22 GMT</code></pre>
+Date: Mon, 25 Mar 2019 16:06:30 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -1354,7 +1270,7 @@ Date: Mon, 25 Mar 2019 15:59:22 GMT</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-03-25 05:24:10 MEZ
+Last updated 2019-03-25 05:31:18 MEZ
 </div>
 </div>
 </body>

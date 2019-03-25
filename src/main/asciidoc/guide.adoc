@@ -5,7 +5,7 @@ Oliver Archner
 :icons: font
 :source-highlighter: highlightjs
 :toc: left
-:toclevels: 4
+:toclevels: 2
 :sectlinks:
 :operation-curl-request-title: Example request
 :operation-http-response-title: Example response
@@ -78,7 +78,7 @@ operation::index-get[snippets='request-parameters,response-fields,curl-request,h
 
 
 [[resources-document-get]]
-=== Get document of an index
+=== Get the document of an index
 
 A `GET` request is used to retrieve the document of an index
 
@@ -97,10 +97,6 @@ operation::index-put[snippets='path-parameters,request-fields']
 A `DELETE` request is used to delete an index entry.
 
 operation::index-delete[snippets='path-parameters']
-
-== Indexes
-
-The indexes resource is used to manage many indexes at the same time.
 
 [[resources-indexes-post]]
 === Create many index entries
