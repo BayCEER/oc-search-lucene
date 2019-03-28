@@ -30,12 +30,22 @@ public class ImageControllerApplicationTests extends ControllerApplicationTests 
 	@After
 	public void shutDown() throws IOException {
 		given(spec)
-		.filter(document("images-delete"))
-		.delete("/images").then().statusCode(200);
+		.filter(document("images-delete",
+				pathParameters(
+						parameterWithName("collection").description("Collection identifier")				
+					)
+				)
+		)
+		.delete("/images/{collection}","default").then().statusCode(200);
 		
 		given(spec)
-		.filter(document("thumbs-delete"))
-		.delete("/thumbnails").then().statusCode(200);
+		.filter(document("thumbs-delete",
+				pathParameters(
+						parameterWithName("collection").description("Collection identifier")				
+					)
+				)
+		)
+		.delete("/thumbnails/{collection}","default").then().statusCode(200);
 	}
 	
 	@Test 
@@ -45,13 +55,14 @@ public class ImageControllerApplicationTests extends ControllerApplicationTests 
 			.contentType("image/png")
 			.filter(document("thumb-post",
 						pathParameters(
+							parameterWithName("collection").description("Collection identifier"),
 							parameterWithName("id").description("File identifier")				
 						)
 						
 					)
 			)
 			.body(new File("src/test/resources/thumb.png"))
-			.post("/thumbnail/{id}",6)
+			.post("/thumbnail/{collection}/{id}","default",6)
 			.then()
 			.statusCode(200);
 		
@@ -59,10 +70,11 @@ public class ImageControllerApplicationTests extends ControllerApplicationTests 
 		Response r = given(spec)
 			.accept("image/png")
 			.filter(document("thumb-get",pathParameters(
+				parameterWithName("collection").description("Collection identifier"),
 				parameterWithName("id").description("File identifier")
 			)))
 		.when()
-			.get("/thumbnail/{id}",6)
+			.get("/thumbnail/{collection}/{id}","default",6)
 		.then()
 			.assertThat().header("Content-Length",Integer::parseInt, equalTo(4093))
 			.statusCode(200)			
@@ -72,10 +84,11 @@ public class ImageControllerApplicationTests extends ControllerApplicationTests 
 		// DELETE
 		given(spec)
 			.filter(document("thumb-delete",pathParameters(
+				parameterWithName("collection").description("Collection identifier"),
 				parameterWithName("id").description("File identifier")
 			)))
 		.when()
-			.delete("thumbnail/{id}", 6)
+			.delete("/thumbnail/{collection}/{id}","default", 6)
 		.then()
 			.statusCode(200);
 		
@@ -83,7 +96,7 @@ public class ImageControllerApplicationTests extends ControllerApplicationTests 
 		given(spec)
 			.accept("image/png")
 		.when()
-			.get("/thumbnail/{id}",6)
+			.get("/thumbnail/{collection}/{id}","default", 6)
 		.then()
 			.statusCode(404);
 		
@@ -97,13 +110,14 @@ public class ImageControllerApplicationTests extends ControllerApplicationTests 
 			.contentType("image/png")
 			.filter(document("image-post",
 						pathParameters(
+							parameterWithName("collection").description("Collection identifier"),								
 							parameterWithName("id").description("File identifier")				
 						)
 						
 					)
 			)
 			.body(new File("src/test/resources/image.png"))
-			.post("/image/{id}",10)
+			.post("/image/{collection}/{id}","default",10)
 			.then()
 			.statusCode(200);
 		
@@ -111,10 +125,11 @@ public class ImageControllerApplicationTests extends ControllerApplicationTests 
 		Response r = given(spec)
 			.accept("image/png")
 			.filter(document("image-get",pathParameters(
+				parameterWithName("collection").description("Collection identifier"),					
 				parameterWithName("id").description("File identifier")
 			)))
 		.when()
-			.get("/image/{id}",10)
+			.get("/image/{collection}/{id}","default",10)
 		.then()
 			.assertThat().header("Content-Length",Integer::parseInt, equalTo(13372342))
 			.statusCode(200)			
@@ -124,10 +139,11 @@ public class ImageControllerApplicationTests extends ControllerApplicationTests 
 		// DELETE
 		given(spec)
 			.filter(document("image-delete",pathParameters(
+				parameterWithName("collection").description("Collection identifier"),
 				parameterWithName("id").description("File identifier")
 			)))
 		.when()
-			.delete("image/{id}", 10)
+			.delete("image/{collection}/{id}","default",10)
 		.then()
 			.statusCode(200);
 		
@@ -135,7 +151,7 @@ public class ImageControllerApplicationTests extends ControllerApplicationTests 
 		given(spec)
 			.accept("image/png")
 		.when()
-			.get("/image/{id}",10)
+			.get("/image/{collection}/{id}","default",10)
 		.then()
 			.statusCode(404);
 		

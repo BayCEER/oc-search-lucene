@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>de.unibayreuth.bayceer.oc</groupId>
 	<artifactId>oc-search-lucene</artifactId>
-	<version>1.2.0</version>
+	<version>1.3.0</version>
 	<name>oc-search-lucene</name>
 	<description>OwnCloud search provider based on Apache Lucene</description>
 

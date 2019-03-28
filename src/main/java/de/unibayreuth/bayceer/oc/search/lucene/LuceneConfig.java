@@ -11,14 +11,9 @@ import java.util.Map;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.miscellaneous.PerFieldAnalyzerWrapper;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriterConfig;
-import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.FSDirectory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 
 @Configuration
 public class LuceneConfig {
@@ -35,18 +30,17 @@ public class LuceneConfig {
 		analyzerPerField.put("content", new ReadMeDcAnalyzer());		
 		return new PerFieldAnalyzerWrapper(new StandardAnalyzer(), analyzerPerField);				 
 	}
-	
-	
-	
-	@Bean
-	public IndexWriterConfig indexWriterConfig() {		
-		return new IndexWriterConfig(analyzer());					
-	}
-	
+		
+		
 	
 	@Bean	
-	public String thumbPath() throws IOException  {
-		Path p = (!imagePath.isEmpty())?Paths.get(imagePath):FileSystems.getDefault().getPath("oc_images");		
+	public String imagePath() throws IOException  {		
+		Path p;
+		if (imagePath.isEmpty()) {
+			p = FileSystems.getDefault().getPath("oc_images");
+		} else {
+			p = Paths.get(imagePath);
+		}				
 		if (Files.notExists(p)) {
 			Files.createDirectories(p);			
 		}		
@@ -54,29 +48,21 @@ public class LuceneConfig {
 	}
 	
 	
-	
-	@Bean
-	@Order(1)
-	public Directory directory() throws IOException  {		 		
-		if (indexPath.isEmpty()) {			
-			return FSDirectory.open(FileSystems.getDefault().getPath("oc_index"));			
+	@Bean	
+	public String indexPath() throws IOException  {		
+		Path p;
+		if (indexPath.isEmpty()) {
+			p = FileSystems.getDefault().getPath("oc_index");
 		} else {
-			return FSDirectory.open(Paths.get(indexPath));	
-		} 
-	}
-		
-		
-	@Bean
-	@Order(2)
-	public IndexWriter indexWriter() throws IOException {
-		IndexWriter w = new IndexWriter(directory(),indexWriterConfig());
-		w.commit();
-		return w;					
+			p = Paths.get(indexPath);
+		}				
+		if (Files.notExists(p)) {
+			Files.createDirectories(p);			
+		}		
+		return p.toString();		 
 	}
 	
-	
-	
-	
+				
 	
 
 }

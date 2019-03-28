@@ -5,6 +5,8 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.modifyUris;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -36,12 +38,14 @@ public abstract class ControllerApplicationTests {
 		
 	@Before	
 	public void setUp() throws IOException{				
-		// Set default content type for all requests		
-		this.spec = new RequestSpecBuilder()
-		        .setContentType("application/json")
-		        .setAccept("application/json")
-		        .addFilter(documentationConfiguration(this.restDocumentation))		        
-		        .build();			
+		// Set default content type for all requests
+		 this.spec = new RequestSpecBuilder()
+				 	.setContentType("application/json")
+			        .setAccept("application/json")
+	                .addFilter(	                		
+	                		documentationConfiguration(this.restDocumentation)	                			                			                	
+	                ).build();
+
 	}
 	
 		

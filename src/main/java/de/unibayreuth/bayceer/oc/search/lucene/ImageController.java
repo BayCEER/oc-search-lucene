@@ -19,6 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ImageController {
 	
+	
+	@Autowired
+	String imagePath;
+	
 	private static final String image_extension = ".png";
 	
 	public enum ImageType {
@@ -28,28 +32,25 @@ public class ImageController {
 			this.code = code;
 		}		
 	}
+					
 	
-	@Autowired
-	String imagePath;
-			
-	
-	@RequestMapping(value = "/thumbnail/{id}", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
-	public byte[] getThumb(@PathVariable Long id) throws NoSuchFileException, IOException {
-			return Files.readAllBytes(getImagePath(id, ImageType.THUMBNAIL));		
+	@RequestMapping(value = "/thumbnail/{collection}/{id}", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
+	public byte[] getThumb(@PathVariable String collection, @PathVariable Long id) throws NoSuchFileException, IOException {
+			return Files.readAllBytes(getImagePath(collection,id,ImageType.THUMBNAIL));		
 	}
 	
-	public boolean exits(Long id, ImageType imageType) {
-	    return getImagePath(id, imageType).toFile().exists();		
+	public boolean exits(String collection, Long id, ImageType imageType) {
+	    return getImagePath(collection, id, imageType).toFile().exists();		
 	}
 	
-	@RequestMapping(value = "/thumbnails", method = RequestMethod.DELETE)
-	public void deleteImages() {
-		deleteFiles(ImageType.THUMBNAIL);
+	@RequestMapping(value = "/thumbnails/{collection}", method = RequestMethod.DELETE)
+	public void deleteImages(@PathVariable String collection) {
+		deleteFiles(collection, ImageType.THUMBNAIL);
 	}
 	
-	@RequestMapping(value = "/images", method = RequestMethod.DELETE)
-	public void deleteThumbs() {
-		deleteFiles(ImageType.IMAGE);
+	@RequestMapping(value = "/images/{collection}", method = RequestMethod.DELETE)
+	public void deleteThumbs(@PathVariable String collection) {
+		deleteFiles(collection,ImageType.IMAGE);
 	}
 	
 	private FilenameFilter fileFilter(ImageType imageType) {
@@ -63,41 +64,42 @@ public class ImageController {
 		
 	}
 	
-	private void deleteFiles(ImageType imageType) {
-		File d = new File(imagePath);		
-		for(File f: d.listFiles(fileFilter(imageType))) {
+	private void deleteFiles(String collection, ImageType imageType) {				
+		for(File f: Paths.get(imagePath,collection).toFile().listFiles(fileFilter(imageType))) {
 			f.delete();
 		}		
 	}
 	
-	@RequestMapping(value = "/thumbnail/{id}", method = RequestMethod.POST, consumes = MediaType.IMAGE_PNG_VALUE)
-	public void createThumb(@PathVariable Long id,@RequestBody byte[] image) throws IOException {		
-			Files.write(getImagePath(id, ImageType.THUMBNAIL), image);		
+	@RequestMapping(value = "/thumbnail/{collection}/{id}", method = RequestMethod.POST, consumes = MediaType.IMAGE_PNG_VALUE)
+	public void createThumb(@PathVariable String collection, @PathVariable Long id,@RequestBody byte[] image) throws IOException {
+			Files.createDirectories(Paths.get(imagePath, collection));	
+			Files.write(getImagePath(collection, id, ImageType.THUMBNAIL), image);		
 	}
 	
-	@RequestMapping(value = "/thumbnail/{id}", method = RequestMethod.DELETE)
-	public void deleteThumb(@PathVariable Long id) throws IOException {
-			Files.deleteIfExists(getImagePath(id, ImageType.THUMBNAIL));		
+	@RequestMapping(value = "/thumbnail/{collection}/{id}", method = RequestMethod.DELETE)
+	public void deleteThumb(@PathVariable String collection,@PathVariable Long id) throws IOException {
+			Files.deleteIfExists(getImagePath(collection,id,ImageType.THUMBNAIL));		
 	}
 	
-	@RequestMapping(value = "/image/{id}", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
-	public byte[] getImage(@PathVariable Long id) throws NoSuchFileException, IOException {				
-			return Files.readAllBytes(getImagePath(id, ImageType.IMAGE));				 
+	@RequestMapping(value = "/image/{collection}/{id}", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
+	public byte[] getImage(@PathVariable String collection, @PathVariable Long id) throws NoSuchFileException, IOException {				
+			return Files.readAllBytes(getImagePath(collection, id, ImageType.IMAGE));				 
 	}
 		
-	@RequestMapping(value = "/image/{id}", method = RequestMethod.POST, consumes = MediaType.IMAGE_PNG_VALUE)
-	public void createImage(@PathVariable Long id,@RequestBody byte[] image) throws IOException {		
-			Files.write(getImagePath(id, ImageType.IMAGE), image);		
+	@RequestMapping(value = "/image/{collection}/{id}", method = RequestMethod.POST, consumes = MediaType.IMAGE_PNG_VALUE)
+	public void createImage(@PathVariable String collection, @PathVariable Long id,@RequestBody byte[] image) throws IOException {
+			Files.createDirectories(Paths.get(imagePath, collection));
+			Files.write(getImagePath(collection,id, ImageType.IMAGE), image);		
 	}
 	
-	@RequestMapping(value = "/image/{id}", method = RequestMethod.DELETE)
-	public void deleteImage(@PathVariable Long id) throws IOException {
-			Files.deleteIfExists(getImagePath(id, ImageType.IMAGE));		
+	@RequestMapping(value = "/image/{collection}/{id}", method = RequestMethod.DELETE)
+	public void deleteImage(@PathVariable String collection, @PathVariable Long id) throws IOException {
+			Files.deleteIfExists(getImagePath(collection,id, ImageType.IMAGE));		
 	}
 	
 		
-	private Path getImagePath(Long id, ImageType imageType) {							
-		return Paths.get(imagePath,String.valueOf(id)  + "_" + imageType.code + image_extension);	
+	private Path getImagePath(String collection, Long id, ImageType imageType) {	
+		return Paths.get(imagePath,collection, String.valueOf(id)  + "_" + imageType.code + image_extension);	
 	}
 	
 

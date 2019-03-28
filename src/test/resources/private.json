@@ -1,0 +1,8 @@
+[
+{"id": 1,"path":"SFB/Microplastics/Calgara/README.dc", "content":"title:Secondary microplastics\ncreator:Homer Simpson\npublisher:University of Calgary\n"},
+{"id": 2,"path":"SFB/Microplastics/Berlin/README.dc",  "content":"title:Primary microplastics\ncreator:Marge Simpson\npublisher:University of Berlin\n"},
+{"id": 3,"path":"SFB/Microplastics/New York/README.dc", "content":"title:Primary microplastics\ncreator:Bart Simpson\npublisher:University of New York\n"},
+{"id": 4,"path":"SFB/Microplastics/London/README.dc","content":"title:Primary microplastics\ncreator:Bart Simpson\npublisher:University of London\n"},
+{"id": 5,"path":"SFB/Microplastics/Paris/README.dc", "content":"title:Primary microplastics\ncreator:Lisa Simpson\npublisher:University of Paris\n"},
+{"id": 6,"path":"SFB/Microplastics/Paris/README.dc", "content":"title:Primary microplastics\ncreator:Maggie Simpson\npublisher:University of Paris\n"}
+]

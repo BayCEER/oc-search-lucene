@@ -12,20 +12,16 @@ import static org.springframework.restdocs.request.RequestDocumentation.paramete
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
-import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.documentationConfiguration;
+
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.JsonFieldType;
-
-import io.restassured.builder.RequestSpecBuilder;
-import io.restassured.http.ContentType;
 
 public class IndexControllerApplicationTests extends ControllerApplicationTests {
 	
@@ -43,23 +39,36 @@ public class IndexControllerApplicationTests extends ControllerApplicationTests 
 	public void setUp() throws IOException{
 		super.setUp();
 		
-		given(spec).delete("/indexes").then().statusCode(200);
-		
-		
-		// Import sample data 		
+		given(spec).delete("/indexes/default").then().statusCode(200);
+		given(spec).delete("/indexes/private").then().statusCode(200);
+				
+		// Import dc data 		
 		given(spec)
 		.filter(
 				document("indexes-post",
+						pathParameters(
+								parameterWithName("collection").description("Collection identifier")				
+						),
 						requestFields(
 								fieldWithPath("[]").description("An array of documents")).andWithPrefix("[].", dcDocumentFields)													
 						)
 		)
-		.body(new String(Files.readAllBytes(Paths.get("src/test/resources/dc.json"))))
-		.post("/indexes")
+		.body(new String(Files.readAllBytes(Paths.get("src/test/resources/default.json"))))
+		.post("/indexes/{collection}","default")
 		.then()
 		.statusCode(200);				
+		
+		
+		// Import dc2 data 		
+		given(spec)		
+		.body(new String(Files.readAllBytes(Paths.get("src/test/resources/private.json"))))
+		.post("/indexes/{collection}","private")
+		.then()
+		.statusCode(200);
+		
 	}
 	
+		
 		
 	
 	@Test
@@ -67,14 +76,17 @@ public class IndexControllerApplicationTests extends ControllerApplicationTests 
 		given(spec)
 		.filter(
 			document("index-post",
+					pathParameters(
+							parameterWithName("collection").description("Collection identifier")				
+					),	
 					requestParameters( 
 							parameterWithName("overWrite").description("Overwrite entry: {true|false}").optional() 							
 					), 
 					requestFields(dcDocumentFields)																			
 			)
 		)
-		.body(new String(Files.readAllBytes(Paths.get("src/test/resources/dc_post.json"))))
-		.post("/index")
+		.body(new String(Files.readAllBytes(Paths.get("src/test/resources/default_post.json"))))
+		.post("/index/{collection}","default")
 		.then()
 		.statusCode(200);				
 	}
@@ -84,6 +96,9 @@ public class IndexControllerApplicationTests extends ControllerApplicationTests 
 		given(spec)
 		.filter(
 			document("index-get", 
+				pathParameters(
+						parameterWithName("collection").description("Collection identifier")				
+				),	
 				requestParameters( 
 						parameterWithName("query").description("http://lucene.apache.org/core/7_7_0/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#package.description[Lucene query parser syntax]"), 
 						parameterWithName("start").description("Start index"),
@@ -103,7 +118,7 @@ public class IndexControllerApplicationTests extends ControllerApplicationTests 
 		.param("query", "Maggie")
 		.param("start", 0)
 		.param("hitsPerPage", 10)
-		.get("/index").then().assertThat().body("hits.size()", is(2))
+		.get("/index/{collection}","default").then().assertThat().body("hits.size()", is(2))
 		.and().body("totalHits", equalTo(2));
 	}
 	
@@ -113,36 +128,45 @@ public class IndexControllerApplicationTests extends ControllerApplicationTests 
 		.filter(
 				document("document-get",
 						pathParameters(
+								parameterWithName("collection").description("Collection identifier"),
 								parameterWithName("id").description("File identifier")				
 						),
 						responseFields(dcDocumentFields)						
 				)
 		)
-		.get("index/{id}",10).then().assertThat()
+		.get("index/{collection}/{id}","default",10).then().assertThat()
 		.body("content",equalTo("title:Secondary microplastics\ncreator:Lisa Simpson\npublisher:University of Calgary\n"));
 	}
 		
 	
 	@Test 
-	public void indexParameterQuery() {
+	public void parameterQueryDefaultCollection() {
 		given(spec).param("query", "creator:Maggie")
-		.get("/index").then()
+		.get("/index/{collection}","default").then()
 		.assertThat().body("hits.size()", is(2))
 		.and().body("totalHits", equalTo(2));
 	}
 	
 	@Test 
+	public void parameterQuerySecondCollection() {
+		given(spec).param("query", "creator:Maggie")
+		.get("/index/{collection}","private").then()
+		.assertThat().body("hits.size()", is(1))
+		.and().body("totalHits", equalTo(1));
+	}
+	
+	@Test 
 	public void indexPaging() {
 		given(spec).param("query", "microplastics").param("start", 0).param("hitsPerPage",5)
-		.get("/index").then()
+		.get("/index/{collection}","default").then()
 		.assertThat().body("hits.size()", is(5)).and().body("totalHits", equalTo(12));
 						
 		given(spec).param("query", "microplastics").param("start", 5).param("hitsPerPage",5)
-		.get("/index").then()
+		.get("/index/{collection}","default").then()
 		.assertThat().body("hits.size()", is(5)).and().body("totalHits", equalTo(12));
 		
 		given(spec).param("query", "microplastics").param("start", 10).param("hitsPerPage",5)
-		.get("/index").then()
+		.get("/index/{collection}","default").then()
 		.assertThat().body("hits.size()",is(2)).and().body("totalHits", equalTo(12));
 	}
 			
@@ -152,17 +176,18 @@ public class IndexControllerApplicationTests extends ControllerApplicationTests 
 		.filter(
 		document("index-put",
 				pathParameters(
+						parameterWithName("collection").description("Collection identifier"),
 						parameterWithName("id").description("File identifier")				
 				),
 				requestFields(dcDocumentFields)																			
 				)
 		)
-		.body(new String(Files.readAllBytes(Paths.get("src/test/resources/dc_update.json"))))
-		.put("/index/{id}",2)
+		.body(new String(Files.readAllBytes(Paths.get("src/test/resources/default_update.json"))))
+		.put("/index/{collection}/{id}","default",2)
 		.then()
 		.statusCode(200);		
 		
-		given(spec).param("query","id:2").get("/index").then().assertThat().body("hits[0].path",equalTo("SFB/Microplastics/Munich/README.dc"));	
+		given(spec).param("query","id:2").get("/index/{collection}","default").then().assertThat().body("hits[0].path",equalTo("SFB/Microplastics/Munich/README.dc"));	
 	}
 		
 		
@@ -171,13 +196,14 @@ public class IndexControllerApplicationTests extends ControllerApplicationTests 
 		given(spec)
 		.filter(document("index-delete",
 				pathParameters(
+						parameterWithName("collection").description("Collection identifier"),
 						parameterWithName("id").description("File identifier")				
 						)
 				
 				)
 		)
-		.delete("/index/{id}",2).then().statusCode(200);
-		given(spec).param("query","id:2").get("/index").then().assertThat().body("totalHits",equalTo(0));
+		.delete("/index/{collection}/{id}","default",2).then().statusCode(200);
+		given(spec).param("query","id:2").get("/index/{collection}","default").then().assertThat().body("totalHits",equalTo(0));
 		
 	}
 	
