@@ -620,8 +620,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/index' -i -X POST \
-    -H 'Content-Type: application/json; charset=UTF-8' \
     -H 'Accept: application/json' \
+    -H 'Content-Type: application/json; charset=UTF-8' \
     -d '{"id":99,"path":"SFB/Microplastics/Munich/README.dc","content":"title:Ternary microplastics\ncreator:Marge Simpson\npublisher:University of Munich\n"}
 '</code></pre>
 </div>
@@ -632,7 +632,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Date: Mon, 25 Mar 2019 16:06:30 GMT</code></pre>
+Date: Tue, 26 Mar 2019 08:25:03 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -730,8 +730,8 @@ Date: Mon, 25 Mar 2019 16:06:30 GMT</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/index?query=Maggie&amp;start=0&amp;hitsPerPage=10' -i -X GET \
-    -H 'Content-Type: application/json; charset=UTF-8' \
-    -H 'Accept: application/json'</code></pre>
+    -H 'Accept: application/json' \
+    -H 'Content-Type: application/json; charset=UTF-8'</code></pre>
 </div>
 </div>
 </div>
@@ -740,7 +740,7 @@ Date: Mon, 25 Mar 2019 16:06:30 GMT</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Date: Mon, 25 Mar 2019 16:06:31 GMT
+Date: Tue, 26 Mar 2019 08:25:04 GMT
 Content-Length: 413
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
@@ -821,8 +821,8 @@ Transfer-Encoding: chunked
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/index/10' -i -X GET \
-    -H 'Content-Type: application/json; charset=UTF-8' \
-    -H 'Accept: application/json'</code></pre>
+    -H 'Accept: application/json' \
+    -H 'Content-Type: application/json; charset=UTF-8'</code></pre>
 </div>
 </div>
 </div>
@@ -831,8 +831,8 @@ Transfer-Encoding: chunked
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Date: Tue, 26 Mar 2019 08:25:05 GMT
 Content-Length: 173
-Date: Mon, 25 Mar 2019 16:06:31 GMT
 Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
 
@@ -1088,8 +1088,8 @@ Transfer-Encoding: chunked
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/image/10' -i -X DELETE \
-    -H 'Content-Type: application/json; charset=UTF-8' \
-    -H 'Accept: application/json'</code></pre>
+    -H 'Accept: application/json' \
+    -H 'Content-Type: application/json; charset=UTF-8'</code></pre>
 </div>
 </div>
 </div>
@@ -1098,7 +1098,7 @@ Transfer-Encoding: chunked
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Date: Mon, 25 Mar 2019 16:06:29 GMT</code></pre>
+Date: Tue, 26 Mar 2019 08:25:02 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -1113,8 +1113,8 @@ Date: Mon, 25 Mar 2019 16:06:29 GMT</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/images' -i -X DELETE \
-    -H 'Content-Type: application/json; charset=UTF-8' \
-    -H 'Accept: application/json'</code></pre>
+    -H 'Accept: application/json' \
+    -H 'Content-Type: application/json; charset=UTF-8'</code></pre>
 </div>
 </div>
 </div>
@@ -1123,7 +1123,7 @@ Date: Mon, 25 Mar 2019 16:06:29 GMT</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Date: Mon, 25 Mar 2019 16:06:30 GMT</code></pre>
+Date: Tue, 26 Mar 2019 08:25:03 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -1225,8 +1225,8 @@ All image data is transferred in PNG (image/png) format.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/thumbnail/6' -i -X DELETE \
-    -H 'Content-Type: application/json; charset=UTF-8' \
-    -H 'Accept: application/json'</code></pre>
+    -H 'Accept: application/json' \
+    -H 'Content-Type: application/json; charset=UTF-8'</code></pre>
 </div>
 </div>
 </div>
@@ -1235,7 +1235,7 @@ All image data is transferred in PNG (image/png) format.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Date: Mon, 25 Mar 2019 16:06:30 GMT</code></pre>
+Date: Tue, 26 Mar 2019 08:25:03 GMT</code></pre>
 </div>
 </div>
 </div>
@@ -1250,8 +1250,8 @@ Date: Mon, 25 Mar 2019 16:06:30 GMT</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/thumbnails' -i -X DELETE \
-    -H 'Content-Type: application/json; charset=UTF-8' \
-    -H 'Accept: application/json'</code></pre>
+    -H 'Accept: application/json' \
+    -H 'Content-Type: application/json; charset=UTF-8'</code></pre>
 </div>
 </div>
 </div>
@@ -1260,7 +1260,7 @@ Date: Mon, 25 Mar 2019 16:06:30 GMT</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Date: Mon, 25 Mar 2019 16:06:30 GMT</code></pre>
+Date: Tue, 26 Mar 2019 08:25:03 GMT</code></pre>
 </div>
 </div>
 </div>

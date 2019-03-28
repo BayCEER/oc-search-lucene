@@ -38,9 +38,9 @@ public abstract class ControllerApplicationTests {
 	public void setUp() throws IOException{				
 		// Set default content type for all requests		
 		this.spec = new RequestSpecBuilder()
-		        .setContentType(ContentType.JSON)
-		        .setAccept(ContentType.JSON)
-		        .addFilter(documentationConfiguration(this.restDocumentation))
+		        .setContentType("application/json")
+		        .setAccept("application/json")
+		        .addFilter(documentationConfiguration(this.restDocumentation))		        
 		        .build();			
 	}
 	
