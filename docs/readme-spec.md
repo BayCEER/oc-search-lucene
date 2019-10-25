@@ -1,8 +1,8 @@
 # README File Specification
-__ Version 1.4.0 __
-__ October 2019 __
+__Version 1.4.0__
+__October 2019__
 
-1 Naming Convention 
+1. Naming Convention 
 - Scope
 	+ Public: __READMEdc.txt__
 	+ Private: __READMEdc.private.txt__
