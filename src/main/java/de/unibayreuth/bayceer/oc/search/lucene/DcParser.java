@@ -13,7 +13,8 @@ public class DcParser {
 
 	// https://regex101.com/
 	// Matches all key values
-	private static final Pattern p = Pattern.compile("^([a-zA-Z]+):(.*)");
+	
+	private static final Pattern p = Pattern.compile("^(.+):(.*)");
 
 	public static List<SimpleEntry<String, String>> parse(String content) throws DcParserException {
 		List<SimpleEntry<String, String>> ret = new ArrayList<SimpleEntry<String, String>>(10);
@@ -25,14 +26,14 @@ public class DcParser {
 				if (matcher.matches()) {
 					String key = matcher.group(1);
 					String value = matcher.group(2);
-					if (value.isEmpty()) {
+					if (value.isEmpty() || key.isEmpty()) {
 						onKey = false;
 					} else {
-						ret.add(new SimpleEntry<String, String>(key, value));
+						ret.add(new SimpleEntry<String, String>(key.trim(), value));
 						onKey = true;
 					}
-
 				} else {
+					// Handle values spanning many lines  
 					if (ret.size() > 0 && onKey) {
 						SimpleEntry<String, String> lastEntry = ret.get(ret.size() - 1);
 						StringBuffer b = new StringBuffer(lastEntry.getValue());
@@ -40,7 +41,6 @@ public class DcParser {
 						b.append(line);
 						lastEntry.setValue(b.toString());
 					}
-
 				}
 
 			}

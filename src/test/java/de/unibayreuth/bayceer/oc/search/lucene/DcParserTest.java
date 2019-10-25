@@ -24,16 +24,38 @@ public class DcParserTest {
 
 	@Test
 	public void parseSimple() throws IOException, DcParserException {
-		String content = new String(Files.readAllBytes(Paths.get("src/test/resources/READMEdc1.txt")));		
+		String content = new String(Files.readAllBytes(Paths.get("src/test/resources/READMEdc_simple.txt")));		
 		List<SimpleEntry<String, String>> dc = DcParser.parse(content);
 		assertEquals(12,dc.size());
 	}
 	
 	@Test 
 	public void parseInvalid() throws IOException, DcParserException {
-		String content = new String(Files.readAllBytes(Paths.get("src/test/resources/READMEdc2.txt")));		
+		String content = new String(Files.readAllBytes(Paths.get("src/test/resources/READMEdc_invalid.txt")));		
 		List<SimpleEntry<String, String>> dc = DcParser.parse(content);
 		assertEquals(2, dc.size());
+	}
+	
+	@Test
+	public void parseMultilineKey() throws IOException, DcParserException {
+		String content = new String(Files.readAllBytes(Paths.get("src/test/resources/READMEdc_multilinekey.txt")));		
+		List<SimpleEntry<String, String>> dc = DcParser.parse(content);
+		assertEquals(2,dc.size());
+		assertEquals("title", dc.get(0).getKey());
+		assertEquals("Line1\n\tLine2", dc.get(0).getValue());
+		
+		assertEquals("author", dc.get(1).getKey());
+		assertEquals("Nobody", dc.get(1).getValue());
+		
+	}
+	
+	@Test
+	public void parseKeySpace() throws IOException, DcParserException {
+		String content = new String(Files.readAllBytes(Paths.get("src/test/resources/READMEdc_keyspace.txt")));		
+		List<SimpleEntry<String, String>> dc = DcParser.parse(content);
+		assertEquals(1,dc.size());
+		assertEquals("key space", dc.get(0).getKey());
+		assertEquals("value", dc.get(0).getValue());
 	}
 
 }

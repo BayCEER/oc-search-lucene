@@ -67,7 +67,8 @@ public class IndexController {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());	
 	private static final String prevViewPreTag = "<mark>"; 
 	private static final String prevViewPostTag = "</mark>";	
-	private static final int maxHits = 100;
+	private static final int numHits = 100;
+	private static final int totalHitsThreshold = 100;
 	
 	
 	public IndexWriter getWriter(String collection) throws IOException {		
@@ -150,7 +151,7 @@ public class IndexController {
                 
 		IndexReader indexReader = DirectoryReader.open(getWriter(collection));
 		IndexSearcher searcher = new IndexSearcher(indexReader);
-		TopScoreDocCollector collector = TopScoreDocCollector.create(maxHits);
+		TopScoreDocCollector collector = TopScoreDocCollector.create(numHits,totalHitsThreshold);
 		searcher.search(q, collector);		
 		List<Hit> hits = new ArrayList<Hit>(hitsPerPage);
 		for (ScoreDoc s : collector.topDocs(start, hitsPerPage).scoreDocs) {			
